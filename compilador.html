@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html>
+
+<link rel='stylesheet' href='prueba.css' />
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<body>
+    <br>
+    <div class="container">
+
+
+        <h1>Arquitectura y Organizacion de computadoras </h1>
+
+        <div class="form-group">
+            <label for="uno">Ingresar instrucciones LEGV8</label>
+            <textarea class="form-control" id="uno" name="uno" rows="5" cols="40"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="dos">Equivalencia</label>
+            <textarea class="form-control" id="dos" name="dos" rows="10" cols="40"></textarea>
+        </div>
+
+        <button type="button" class="btn btn-primary" id="action" name="action">Ingresar</button>
+
+        <script>
+            document.getElementById("action").onclick = function() {
+                myFunction()
+            };
+            document.getElementById("action").ondblclick = function() {
+                clear()
+            };
+            document.getElementById("dos").onkeypress = function() {
+                run()
+            };
+
+            function opco(aux,renglon) { //Es el reglon 
+                var add = /\bADD\b/gi,
+                    and = /AND/gi,
+                    sub = /\bSUB\b/gi,
+                    stur = /STUR/gi,
+                    ldur = /LDUR/gi,
+                    addi=/ADDI/gi,
+                    subi=/SUBI/gi,
+                    b = /\bB\b/gi,
+                    bl = /BL/gi,
+                    br = /BR/gi,
+
+                    cbz = /CBZ/gi,
+                    cbnz = /CBNZ/gi,
+                    eti = /[a-zA-Z]+:/gi,
+                    todas = /ADD|AND|SUB|STUR|LDUR|BL|CBZ|CBNZ|[a-zA-Z]+:/gi,
+                    ret;
+                var words = aux.split(/\s+/g);
+                //aux=aux.split(/\s+/g);
+                var opcode = "00000000000";
+                if (addi.test(words[0]) == true) {
+                    opcode = "1001000100";
+                    aux = parseInt(words[3], 10);
+
+                    var es2="";
+                    //alert(aux);
+                    //    alert(renglon);
+                    var dife=aux;
+                    if (dife<0){
+                        for(let s=11;s>=0;s--){
+                            es2+=(dife&(1<<s))?1:0;
+                        }
+                        ret=es2;
+                        //alert(es2);
+                    }
+                    else{  
+
+                        ret = aux.toString(2);
+                        while (ret.length < 12) {
+                        ret = '0' + ret;
+                        }
+                    }
+                    
+                    //document.write(ret);
+                    opcode = opcode + ret ;
+                    aux = parseInt(words[2], 10);
+                    ret = aux.toString(2);
+                    while (ret.length < 5) {
+                        ret = '0' + ret;
+                    }
+                    //document.write(ret);
+                    opcode = opcode + ret;
+                    aux = parseInt(words[1], 10);
+                    ret = aux.toString(2);
+                    while (ret.length < 5) {
+                        ret = '0' + ret;
+                    }
+                    //document.write(ret);
+                    opcode = opcode + ret
+                }
+                
+                if (subi.test(words[0]) == true) {
+                    opcode = "1101000100";
+                    aux = parseInt(words[3], 10)
+                    var es2="";
+                    //alert(aux);
+                    //    alert(renglon);
+                    var dife=aux;
+                    if (dife<0){
+                        for(let s=11;s>=0;s--){
+                            es2+=(dife&(1<<s))?1:0;
+                        }
+                        ret=es2;
+                        
+                        //alert(es2);
+                    }
+                    else{  
+
+                        ret = aux.toString(2);
+                        while (ret.length < 12) {
+                        ret = '0' + ret;
+                        }
+                    }
+                    
+                    opcode = opcode + ret ;
+                    aux = parseInt(words[2], 10);
+                    ret = aux.toString(2);
+                    while (ret.length < 5) {
+                        ret = '0' + ret;
+                    }
+                    //document.write(ret);
+                    opcode = opcode + ret;
+                    aux = parseInt(words[1], 10);
+                    ret = aux.toString(2);
+                    while (ret.length < 5) {
+                        ret = '0' + ret;
+                    }
+                    //document.write(ret);
+                    opcode = opcode + ret
+                }
+
+                if (add.test(words[0]) == true) { //R
+                    opcode = "10001011000";
+
+                    aux = parseInt(words[3], 10);
+                    ret = aux.toString(2);
+                    while (ret.length < 5) {
+                        ret = '0' + ret;
+                    }
+                    //document.write(ret);
+                    opcode = opcode + ret + "000000";
+                    aux = parseInt(words[2], 10);
+                    ret = aux.toString(2);
+                    while (ret.length < 5) {
+                        ret = '0' + ret;
+                    }
+                    //document.write(ret);
+                    opcode = opcode + ret;
+                    aux = parseInt(words[1], 10);
+                    ret = aux.toString(2);
+                    while (ret.length < 5) {
+                        ret = '0' + ret;
+                    }
+                    //document.write(ret);
+                    opcode = opcode + ret
+
+                }
+                if (and.test(words[0]) == true) { //R
+                    opcode = "10001010000";
+                    aux = parseInt(words[3], 10);
+                    ret = aux.toString(2);
+                    while (ret.length < 5) {
+                        ret = '0' + ret;
+                    }
+                    //document.write(ret);
+                    opcode = opcode + ret + "000000";
+                    aux = parseInt(words[2], 10);
+                    ret = aux.toString(2);
+                    while (ret.length < 5) {
+                        ret = '0' + ret;
+                    }
+                    //document.write(ret);
+                    opcode = opcode + ret;
+                    aux = parseInt(words[1], 10);
+                    ret = aux.toString(2);
+                    while (ret.length < 5) {
+                        ret = '0' + ret;
+                    }
+                    //document.write(ret);
+                    opcode = opcode + ret
+                }
+                if (sub.test(words[0]) == true) { //
+                    opcode = "11001011000";
+                    aux = parseInt(words[3], 10);
+                    ret = aux.toString(2);
+                    while (ret.length < 5) {
+                        ret = '0' + ret;
+                    }
+                    //document.write(ret);
+                    opcode = opcode + ret + "000000";
+                    aux = parseInt(words[2], 10);
+                    ret = aux.toString(2);
+                    while (ret.length < 5) {
+                        ret = '0' + ret;
+                    }
+                    //document.write(ret);
+                    opcode = opcode + ret;
+                    aux = parseInt(words[1], 10);
+                    ret = aux.toString(2);
+                    while (ret.length < 5) {
+                        ret = '0' + ret;
+                    }
+                    //document.write(ret);
+                    opcode = opcode + ret
+                }
+                if (stur.test(words[0]) == true) {
+                    opcode = "11111000000";
+                    aux = parseInt(words[3], 10)*8;
+                    ret = aux.toString(2);
+                    while (ret.length < 9) {
+                        ret = '0' + ret;
+                    }
+                    //document.write(ret);
+                    opcode = opcode + ret + "00";
+                    aux = parseInt(words[2], 10);
+                    ret = aux.toString(2);
+                    while (ret.length < 5) {
+                        ret = '0' + ret;
+                    }
+                    //document.write(ret);
+                    opcode = opcode + ret;
+                    aux = parseInt(words[1], 10);
+                    ret = aux.toString(2);
+                    while (ret.length < 5) {
+                        ret = '0' + ret;
+                    }
+                    //document.write(ret);
+                    opcode = opcode + ret
+                }
+                if (ldur.test(words[0]) == true) {
+                    opcode = "11111000010";
+                    aux = parseInt(words[3], 10)*8;
+                    ret = aux.toString(2);
+                    while (ret.length < 9) {
+                        ret = '0' + ret;
+                    }
+                    //document.write(ret);
+                    opcode = opcode + ret + "00";
+                    aux = parseInt(words[2], 10);
+                    ret = aux.toString(2);
+                    while (ret.length < 5) {
+                        ret = '0' + ret;
+                    }
+                    //document.write(ret);
+                    opcode = opcode + ret;
+                    aux = parseInt(words[1], 10);
+                    ret = aux.toString(2);
+                    while (ret.length < 5) {
+                        ret = '0' + ret;
+                    }
+                    //document.write(ret);
+                    opcode = opcode + ret;
+                }
+
+                if (b.test(words[0]) == true) { //  	r
+                    opcode = "000101";
+                    aux = parseInt(words[1], 10);
+                    ret = aux.toString(2);
+                    while (ret.length < 26) {
+                        ret = '0' + ret;
+                    }
+                    opcode = opcode + ret;
+                }
+
+                if (bl.test(words[0]) == true) { //
+                    opcode = "100101";
+                    aux = parseInt(words[1], 10);
+                    ret = aux.toString(2);
+                    while (ret.length < 26) {
+                        ret = '0' + ret;
+                    }
+                    opcode = opcode + ret;
+                }
+                if (br.test(words[0]) == true) { //
+                    opcode = "11010110000";
+                    aux = parseInt(words[1], 10);
+                    ret = aux.toString(2);
+                    while (ret.length < 21) {
+                        ret = '0' + ret;
+                    }
+                    opcode = opcode + ret;
+                }
+                if (cbz.test(words[0]) == true) { //
+                    opcode = "10110100";
+
+                    aux = parseInt(words[2], 10);   //etiqueta 
+                    var es2="";
+                    //alert(aux);
+                    //alert(renglon);
+                    var dife=(aux-(renglon));
+
+                    //alert(dife);
+
+                    if (dife<0){
+                        for(let s=19;s>=0;s--){
+                            es2+=(dife&(1<<s))?1:0;
+                        }
+                        ret=es2;
+                        //alert(es2);
+                    }
+                    else{  
+
+                        ret = dife.toString(2);
+                        while (ret.length < 19) {
+                        ret = '0' + ret;
+                        }
+
+
+                    }
+                    
+                    opcode = opcode + ret;
+
+                    aux = parseInt(words[1], 10);   
+                    ret = aux.toString(2);
+                    while (ret.length < 5) {
+                        ret = '0' + ret;
+                    }
+                    opcode = opcode + ret;
+                }
+                if (cbnz.test(words[0]) == true) { //
+                    opcode = "10110101";
+
+                    aux = parseInt(words[2], 10);
+                    var es2="";
+                    //alert(aux);
+                    //    alert(renglon);
+                    var dife=(aux-(renglon));
+                    if (dife<0){
+                        for(let s=19;s>=0;s--){
+                            es2+=(dife&(1<<s))?1:0;
+                        }
+                        ret=es2;
+                        //alert(es2);
+                    }
+                    else{  
+
+                        ret = dife.toString(2);
+                        while (ret.length < 19) {
+                        ret = '0' + ret;
+                        }
+
+
+                    }
+                    opcode = opcode + ret;
+                }
+
+                aux = parseInt(opcode, 2);
+                ret = aux.toString(16);
+                //document.write("x\""+ret+"\"");//resultado deseado xD
+                //document.write("**"+opcode);
+                return "x\""+ret+"\""+",  --"+words+"   ";
+                //return opcode + "\\\\" + words;
+            }
+
+            function myFunction() {
+                //document.getElementById("uno").value;
+                var cadena = document.getElementById("uno").value;
+                var cadena1 = cadena;
+                var palabra = /\b\w+\b/g;
+
+                var aux = cadena1.replace(/\n/g, ' * ');
+                aux = aux.split(/\s/g);
+                etiqueta = /\w+:/;
+                var sepa = /'*'/g; //me indica los saltos
+
+                var x = 0,
+                    saltos = 1,
+                    et = "";
+                var salida = " ";
+                //---------------------------------------------------------
+                //			Trata de cadena
+                //---------------------------------------------------------
+                var words = " ";
+                //			Expresiones
+                var expr = /,|X|x|\[|\]|#/g,
+                    exp = /\s+/g;
+
+
+                cadena1 = cadena1.replace(/:/g, ''); //Eliminar de la auxiliar para usar despues 
+
+
+                //			PARA ELIMINAR LAS ETIQUETAS Y DEJAR EL NUMERO DE RENGLON
+                while (aux[x] != undefined) {
+                    if (aux[x] == '*') {
+                        saltos = saltos + 1;
+                    }
+
+                    if (etiqueta.test(aux[x])) {
+                        var s = aux[x].replace(':', ''); // necesito quirar los : para buscarla 
+                        var w = s + " ";
+                        cadena1 = cadena1.replace(w, ''); //eliminar la etiqueta
+                        cadena1 = cadena1.replace(s, saltos);
+                        cadena1 = cadena1.replace(s, saltos); //remplazar la etiqueta por direccion  
+                        cadena1 = cadena1.replace(s, saltos);
+                        cadena1 = cadena1.replace(s, saltos); //remplazar la etiqueta por direccion  
+                        // 4 por el tamaño de la instruccion
+                        salida = salida + s;
+                    }
+                    x = x + 1;
+                }
+
+                cadena1 = cadena1.replace(/\n/g, '*');
+                cadena1 = cadena1.replace(expr, ' '); //expresion a usar;
+                cadena1 = cadena1.replace(exp, ' ');
+                var i = 0;
+                var final = cadena1.split('*'),
+                    words = "x\"FFFFFFFF\",  -- none\n",
+                    word = ""
+                var testo = " ";
+
+                while (final[i] != undefined) {
+
+                    if (final[i] == ("\n" | "\t" | " ")) {
+                        ;
+                    } else {
+
+                        //word=word+""+final[i]
+                        words = words + opco(final[i],i+1) + "\n";
+                    }
+
+
+
+
+                    i++;
+
+
+                    //testo=testo+opco(final[i])+"\n";
+                }
+                if ((i)%2==1){
+                    words=words+"x\"FFFFFFFF\",  -- none\n";
+                }
+
+
+
+
+                var es = "-20";
+                //SSi tiene guion 		quitarselo
+                var es1 = parseInt(es, 10);
+                var es2="";
+
+                
+                //es2=~es2+1;
+
+
+                //document.getElementById("dos").value ="qjgjhgjhghj";
+                //document.getElementById("dos").value = cadena1 + "\n" + words + es2;
+                document.getElementById("dos").value =  words+ es2;
+
+                //document.getElementById("dos").value =final+" :"+final[0]+"++"+final[1]+"++"+final[2];
+                //document.getElementById("dos").value=testo;
+
+            }
+
+
+            function clear() {
+                document.getElementById("dos").value = "";
+                document.getElementById("uno").value = "";
+            }
+        </script>
+    </div>
+
+<div style="text-align: right;position: fixed;z-index:9999999;bottom: 0;width: auto;right: 1%;cursor: pointer;line-height: 0;display:block !important;"><a title="Hosted on free web hosting 000webhost.com. Host your own website for FREE." target="_blank" href="https://www.000webhost.com/?utm_source=000webhostapp&utm_campaign=000_logo&utm_medium=website&utm_content=footer_img"><img src="https://cdn.000webhost.com/000webhost/logo/footer-powered-by-000webhost-white2.png" alt="www.000webhost.com"></a></div><script>function getCookie(t){for(var e=t+"=",n=decodeURIComponent(document.cookie).split(";"),o=0;o<n.length;o++){for(var i=n[o];" "==i.charAt(0);)i=i.substring(1);if(0==i.indexOf(e))return i.substring(e.length,i.length)}return""}getCookie("hostinger")&&(document.cookie="hostinger=;expires=Thu, 01 Jan 1970 00:00:01 GMT;",location.reload());var wordpressAdminBody=document.getElementsByClassName("wp-admin")[0],notification=document.getElementsByClassName("notice notice-success is-dismissible"),hostingerLogo=document.getElementsByClassName("hlogo"),mainContent=document.getElementsByClassName("notice_content")[0];if(null!=wordpressAdminBody&&notification.length>0&&null!=mainContent){var googleFont=document.createElement("link");googleFontHref=document.createAttribute("href"),googleFontRel=document.createAttribute("rel"),googleFontHref.value="https://fonts.googleapis.com/css?family=Roboto:300,400,600",googleFontRel.value="stylesheet",googleFont.setAttributeNode(googleFontHref),googleFont.setAttributeNode(googleFontRel);var css="@media only screen and (max-width: 576px) {#main_content {max-width: 320px !important;} #main_content h1 {font-size: 30px !important;} #main_content h2 {font-size: 40px !important; margin: 20px 0 !important;} #main_content p {font-size: 14px !important;} #main_content .content-wrapper {text-align: center !important;}} @media only screen and (max-width: 781px) {#main_content {margin: auto; justify-content: center; max-width: 445px;}} @media only screen and (max-width: 1325px) {.web-hosting-90-off-image-wrapper {position: absolute; max-width: 95% !important;} .notice_content {justify-content: center;} .web-hosting-90-off-image {opacity: 0.3;}} @media only screen and (min-width: 769px) {.notice_content {justify-content: space-between;} #main_content {margin-left: 5%; max-width: 445px;} .web-hosting-90-off-image-wrapper {position: absolute; right: 0; display: flex; padding: 0 5%}} .web-hosting-90-off-image {max-width: 90%; margin-top: 20px;} .content-wrapper {z-index: 5} .notice_content {display: flex; align-items: center;} * {-webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;} .upgrade_button_red_sale{box-shadow: 0 2px 4px 0 rgba(255, 69, 70, 0.2); max-width: 350px; border: 0; border-radius: 3px; background-color: #ff4546 !important; padding: 15px 55px !important;  margin-bottom: 48px; font-family: 'Roboto', sans-serif; font-size: 16px; font-weight: 600; color: #ffffff;} .upgrade_button_red_sale:hover{color: #ffffff !important; background: #d10303 !important;}",style=document.createElement("style"),sheet=window.document.styleSheets[0];style.styleSheet?style.styleSheet.cssText=css:style.appendChild(document.createTextNode(css)),document.getElementsByTagName("head")[0].appendChild(style),document.getElementsByTagName("head")[0].appendChild(googleFont);var button=document.getElementsByClassName("upgrade_button_red")[0],link=button.parentElement;link.setAttribute("href","https://www.hostinger.com/hosting-starter-offer?utm_source=000webhost&utm_medium=panel&utm_campaign=000-wp"),link.innerHTML='<button class="upgrade_button_red_sale">TRANSFER NOW</button>',(notification=notification[0]).setAttribute("style","padding-bottom: 0; padding-top: 5px; background: url(https://cdn.000webhost.com/000webhost/promotions/cyber-monday-2019-bg.jpg); background-size: cover; background-repeat: no-repeat; color: #ffffff; border-color: #ff123a; border-width: 8px;"),notification.className="notice notice-error is-dismissible";var mainContentHolder=document.getElementById("main_content");mainContentHolder.setAttribute("style","padding: 0;"),hostingerLogo[0].remove();var h1Tag=notification.getElementsByTagName("H1")[0];h1Tag.className="000-h1",h1Tag.innerHTML="Cyber Monday Sale",h1Tag.setAttribute("style",'color: white;  margin-top: 48px; font-family: "Roboto", sans-serif; font-size: 48px; font-weight: 600;');var h2Tag=document.createElement("H2");h2Tag.innerHTML="Get 90% Off!",h2Tag.setAttribute("style",'color: white; margin: 45px 0; font-family: "Roboto", sans-serif; font-size: 80px; font-weight: 600;'),h1Tag.parentNode.insertBefore(h2Tag,h1Tag.nextSibling);var paragraph=notification.getElementsByTagName("p")[0];paragraph.innerHTML="Don’t miss the opportunity to enjoy up to <strong>4x WordPress Speed, Free SSL and all premium features</strong> available for a fraction of the price!",paragraph.setAttribute("style",'font-family: "Roboto", sans-serif; font-size: 18px; font-weight: 300;');var list=notification.getElementsByTagName("UL")[0];list.remove();var org_html=mainContent.innerHTML,new_html='<div class="content-wrapper">'+mainContent.innerHTML+'</div><div class="web-hosting-90-off-image-wrapper"><img class="web-hosting-90-off-image" src="https://cdn.000webhost.com/000webhost/promotions/cyber-monday-2019-img.png"></div>';mainContent.innerHTML=new_html;var saleImage=mainContent.getElementsByClassName("web-hosting-90-off-image")[0]}</script></body>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</html>
